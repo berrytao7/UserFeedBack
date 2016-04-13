@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- activity_main.xml -->
+  	<dimen name="title_h">64dip</dimen>
+  	<dimen name="title_left_padding">24dip</dimen>
+    <dimen name="main_grid_w">620dip</dimen>
+    <dimen name="main_grid_h">620dip</dimen>
+    <dimen name="main_grid_v_padding">40dip</dimen>
+    <dimen name="main_grid_h_padding">40dip</dimen>
+    <dimen name="main_text_buttom_margin">140dip</dimen>
+    <dimen name="main_eamil_buttom_margin">100dip</dimen>
+    <dimen name="main_item_top_margin">8dip</dimen>
+        
+    <!-- layout_main_gridview_item.xml  -->
+    <dimen name="main_item_w">120dip</dimen>
+    <dimen name="main_item_h">120dip</dimen>
+    
+   
+   <!-- activity_item.xml -->
+   <dimen name="item_commit_w">72dip</dimen>
+   <dimen name="item_commit_h">38dip</dimen>
+   <dimen name="item_commit_right_margin">24dip</dimen>
+   
+   <dimen name="item_body_top_padding">30dip</dimen>
+   <dimen name="item_body_left_padding">24dip</dimen>
+   <dimen name="item_body_right_padding">24dip</dimen>
+   
+   
+   <dimen name="item1_h">120dip</dimen>
+   <dimen name="item_type_h">60dip</dimen>
+   <dimen name="item_type_icon_w">48dip</dimen>
+   <dimen name="item_type_icon_h">48dip</dimen>
+   <dimen name="item_type_txt_h">60dip</dimen>
+   <dimen name="item_type_txt_left_padding">30dip</dimen>
+   
+   <dimen name="item2_h">280dip</dimen>
+   <dimen name="item2_top_margin">30dip</dimen>
+   <dimen name="item_desp_h">60dip</dimen>   
+   <dimen name="item_desp_icon_w">48dip</dimen>
+   <dimen name="item_desp_icon_h">48dip</dimen>
+   <dimen name="item_desp_edit_h">220dip</dimen>
+   <dimen name="item_desp_edit_padding">24dip</dimen>
+   
+   <dimen name="item3_h">215dip</dimen>
+   <dimen name="item3_top_margin">30dip</dimen>
+   <dimen name="item_feed_h">60dip</dimen>
+   <dimen name="item_feed_icon_w">48dip</dimen>
+   <dimen name="item_feed_icon_h">48dip</dimen>
+   <dimen name="item_feed_grid_w">470dip</dimen>
+   <dimen name="item_feed_grid_h">155dip</dimen>
+   <dimen name="item_feed_grid_v_padding">1dip</dimen>
+   
+    <dimen name="item4_h">120dip</dimen>    
+   <dimen name="item4_top_margin">30dip</dimen>
+   <dimen name="item_eamil_h">60dip</dimen>
+   <dimen name="item_email_icon_w">48dip</dimen>
+   <dimen name="item_email_icon_h">48dip</dimen>
+   <dimen name="item_email_edit_h">60dip</dimen>
+   <dimen name="item_email_padding">24dip</dimen>
+   
+   <!-- layout_item_gridview_item.xml -->
+   <dimen name="item_image_w">155dip</dimen>
+   <dimen name="item_image_h">155dip</dimen>
+   <dimen name="item_icon">40dip</dimen>
+   
+   <!-- toast距底部距离 -->
+   <dimen name="toast_buttom_margin">140dip</dimen>
+    
+    
+</resources>

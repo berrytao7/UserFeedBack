@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>   
+
+<!-- 整体背景色 灰色 -->
+    <color name="body_bg_color">#F0F0F0</color>
+    <!-- activity_main.xml -->
+    <!-- 标题栏字体颜色 前两位透明度-->
+   	<color name="title_text_color">#CCFFFFFF</color>
+   	<!-- body字体颜色 -->
+   	<color name="body_text_color">#CC000000</color>
+   	<!-- 底部字体颜色 -->
+   	<color name="buttom_text_color">#7F000000</color>
+   	
+   	<!-- activity_item.xml -->
+   	<!-- 提交按钮字体颜色 -->
+   	<color name="commit_text_color">#FFFFFF</color>
+   	<!-- 小标题字体颜色 -->
+   	<color name="item_title_color">#CC000000</color>
+   	<color name="item_type_color">#72000000</color> 
+   	<!-- 内容字体颜色 -->
+   	<color name="item_body_color">#33000000</color> 	
+   	
+   	<!-- 编辑框字体颜色 -->
+   	<color name="edit_text_color">#99000000</color>
+   	
+   	<!-- layout_toast.xml -->
+   	<color name="toast_text_color">#FFFFFF</color>
+   	<color name="edit_cursor_color">#3366FF</color>
+   	<!-- 橙色:F5B800,蓝色：3366FF，绿色：00CC99 -->
+   	
+   	
+</resources>

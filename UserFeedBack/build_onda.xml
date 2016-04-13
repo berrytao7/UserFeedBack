@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+	描述：
+		onda版本构建
+-->
+ 
+<project name="DailyBuild" default="buildAll" basedir=".">
+
+	<target name="buildOnda">
+	<!---->
+		<antcall target="clean" />
+		<antcall target="copy_padalib_onda"/>
+		<antcall target="init_pada_onda" />
+		<antcall target="init" />
+		<antcall target="generate" />
+		<antcall target="aidl" />
+		<antcall target="compile" />
+		<antcall target="package" />
+		<antcall target="dex" />
+		<antcall target="package_res_with_assets" >
+		<param name="file_name" value="${onda_file_name}"/>
+		</antcall>
+		<antcall target="release" >
+		<param name="file_name" value="${onda_file_name}"/>
+		</antcall>
+	    <antcall target="sign" >
+		 <param name="file_name" value="${onda_file_name}"/>
+		</antcall>
+		<!-- <antcall target="sign-obfs" /> -->
+		<antcall target="zipalign" >
+		<param name="file_name" value="${onda_file_name}"/>
+		<param name="brand" value="${brand.onda}"/>			
+		</antcall>
+<!-- 		<antcall target="endzipalign" /> -->
+	</target>
+	
+	<!-- 复制padalib库到UserFeedBack中 -->
+	<target name="copy_padalib_onda">
+	    <echo> start copy padalib...</echo>
+
+	    <echo> copying padalib src...</echo>
+	    <copy todir="${project_path}/src">
+	        <fileset dir="${padalib_path}/src">
+	            <exclude name="**/.svn/*" />
+	        </fileset>
+	    </copy>	    
+	    
+	    <echo> "com.pada" is replaced "com.jui.feedback"</echo>
+	     <replace dir="${project_path}/src/pada" token="com.pada.R" value="com.jui.feedback.R"></replace>
+	    <echo> copying padalib res...</echo>
+	    
+	   <!-- 复制padalib 的公用资源 -->
+	    <copy todir="${project_path}/res">
+	        <fileset dir="${padalib_path}/res">
+	            <exclude name="**/.svn/*" />
+	        </fileset>
+	    </copy>
+	    
+	    <!-- 复制padalib公版的差分资源 -->
+	    <copy todir="${project_path}/res"  overwrite="true">
+	        <fileset dir="${padalib_config_path}/onda/res">
+	            <exclude name="**/.svn/*" />
+	        </fileset>
+	    </copy>
+	    
+	    <echo> copying padalib libs...</echo>
+	    <copy todir="${project_path}/libs">
+	        <fileset dir="${padalib_path}/libs">
+	            <exclude name="**/.svn/*" />
+	        </fileset>
+	    </copy>
+	    
+	    <echo> end copy padalib...</echo>
+	</target>
+
+	<!--Pada公版-->
+	<target name="init_pada_onda">
+		<echo>Start init...</echo>
+
+		<mkdir dir="${bin}" />
+		<mkdir dir="${temp}" />
+		<mkdir dir="${classes}" />
+		<!-- <mkdir dir="${classes-obfs}" /> -->
+		<mkdir dir="${gen}" />
+		<mkdir dir="${lib}" />
+
+	    <!--复制不同的版本公用的资源-->
+<!-- 		<copy todir="${project_path}/res" overwrite="true"> -->
+<!-- 			<fileset dir="${config_path}/res_common"> -->
+<!-- 			</fileset> -->
+<!-- 		</copy> -->
+		
+		<!--复制不同的版本差别资源-->
+		<copy todir="${project_path}/res" overwrite="true">
+			<fileset dir="${config_path}/onda/res">
+			</fileset>
+		</copy>
+		
+		<echo>Finish init...</echo>
+	</target>
+	
+</project>

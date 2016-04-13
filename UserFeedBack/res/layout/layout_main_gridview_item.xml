@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" 
+    android:gravity="center"
+ >
+    <ImageView 
+        android:id="@+id/myImage"
+        android:layout_width="@dimen/main_item_w"
+        android:layout_height="@dimen/main_item_h"
+        android:scaleType="center"
+        android:layout_centerHorizontal="true"
+        />
+    <TextView 
+        android:id="@+id/myText"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/myImage"
+        android:textColor="@color/jui_body_text_color"
+        android:textSize="@dimen/body_text_size"
+        android:layout_marginTop="@dimen/main_item_top_margin"
+        android:gravity="center"        
+        />
+
+</RelativeLayout>

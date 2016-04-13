@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+	描述：
+		项目构建的参数设置，所有路径等变化的属性都在这里进行设置，
+		如项目路径、工具路径等。
+		对于系统属性，请不要修改，如有疑问，请RTX咨询RDM；
+		对于项目属性，请参照说明进行修改；
+-->
+ 
+<project name="option" default="">	
+
+	<!-- 系统属性，请不要擅自修改 -->
+	<property environment="env" />	<!-- 环境变量 -->
+
+	<property name="ws" value="${env.WORKSPACE}" />	<!-- 取服务器Woskspace路径 -->
+	<property name="isCI" value="false" />	<!--布尔值，true表示服务器环境，false表示开发环境 -->
+	<available file="${ws}/build.xml" property="isCI" />	<!-- 初始化isCI值 -->
+	
+	<!-- 项目属性，请根据对应的描述进行更新 -->
+	<!-- 编译使用的Android SDK版本设置，这里的4是指使用1.6版本的SDK-->
+	<property name="android_version" value="19" />
+	<!-- 混淆使用的Proguard版本，可选版本有：4.4、4.5.1、4.6-->
+	<property name="proguard_version" value="4.6" />
+	<!-- 文件编码设置 -->
+	<property name="encoding" value="UTF-8" />
+	<!-- 默认执行混淆 -->
+	<property name="obfuscated" value="true" />
+	
+    <!-- 工程版本号 -->
+	<property name="version_name" value="1.00" />
+	<!-- 工程名称 -->
+	<property name="app_name" value="UserFeedBack" />	
+	<!-- ONDA名称 -->
+	<property name="onda_app_name" value="onda_${app_name}" />
+	<!-- 台电名称 -->
+	<property name="teclast_app_name" value="teclast_${app_name}" />
+	<!-- 七彩虹名称 -->
+	<property name="option_app_name" value="option_${app_name}" />
+	<!-- 普耐尔名称-->
+	<property name="ployer_app_name" value="ployer_${app_name}" />	
+	<!-- 公版名称 -->
+	<property name="public_app_name" value="${app_name}" />
+	<!-- 平网名称 -->
+	<property name="plainnet_app_name" value="plainnet_${app_name}" />
+   <!-- 华文名称 -->
+	<property name="huawen_app_name" value="huawen_${app_name}" />
+	<!--ONDA版本生存的文件APK名 allenduan modify 20140306-->
+	<property name="onda_file_name" value="onda${build.number}" />	
+	<!--台电版本生存的文件APK名 -->
+	<property name="teclast_file_name" value="teclast${build.number}" />	
+
+	<!--普耐尔版本生存的文件APK名 -->
+	<property name="ployer_file_name" value="ployer${build.number}" />
+	<!--PUBLIC版本生存的文件APK名-->
+	<property name="public_file_name" value="jianUI${build.number}" />	
+	
+	<property name="plainnet_file_name" value="plainnet${build.number}"/>
+	
+	<property name="huawen_file_name" value="huawen${build.number}"/>
+	
+	<!--本地打包的文件名前缀 -->
+	<condition property="file_name" value="${build.number}" else="${env.BaseLine}">
+		<not>
+			<istrue value="${isCI}" />
+		</not>
+	</condition>
+	
+	<!-- padalib库路径 -->
+	<condition property="padalib_path" value="D:\build\PadaLibBuild\padaLib">
+		<not>
+			<istrue value="${isCI}" />
+		</not>
+	</condition>
+	<!-- padalib 各版本的资源路径 -->
+	<condition property="padalib_config_path" value="d:\build\PadaLibBuild\padaLibConfig" else="${env.WORKSPACE}">
+		<not>
+			<istrue value="${isCI}" />
+		</not>
+	</condition>
+	
+	<!--本地工作区路径-->
+	<condition property="project_path" value="d:\build\UserFeedBackBuild\UserFeedBack" else="${env.WORKSPACE}">
+		<not>
+			<istrue value="${isCI}" />
+		</not>
+	</condition>
+
+	<!--厂商渠道配置路径-->
+	<condition property="config_path" value="d:\build\UserFeedBackBuild\FeedBackConfig" else="${env.WORKSPACE}">
+		<not>
+			<istrue value="${isCI}" />
+		</not>
+	</condition>
+
+		<!--编译根目录-->
+	<condition property="build_root" value="d:\build\UserFeedBackBuild\" else="${env.WORKSPACE}">
+		<not>
+			<istrue value="${isCI}" />
+		</not>
+	</condition>
+	
+	<!--AndroidSDK 安装路径，如果本地不同，请按实际情况修改 -->
+	<condition property="android_home" value="D:\adt-bundle-windows-x86-20131030\sdk">
+		<not>
+			<istrue value="${isCI}" />
+		</not>
+	</condition>
+	
+	<!--ProguardHone路径，请按实际情况修改 -->
+<!-- 	<condition property="proguard_home" value="F:\android-sdk-windows\proguard4.4" else="C:\Progra~1\proguard${proguard_version}">
+		<not>
+			<istrue value="${isCI}"/>
+		</not>
+	</condition> -->
+	
+	<!--本地jarsigner的路径，如果已加入环境变量，则不用修改，否则需要指定具体目录 ,jdk7.0以上签名得到的apk文件不能安装 -->
+	<condition property="signer" value="jarsigner" else="jarsigner">
+		<not>
+			<istrue value="${isCI}" />
+		</not>
+	</condition>
+	
+	<!-- 签名文件设置，请将签名文件放到SVN上，并在这里指定签名文件，建议将签名文件放到构建脚本同级目录，${project_path}即为工作目录-->
+	<property name="keystore" value="${project_path}\pada_keystore_formal" />
+	<!-- 签名的密钥名称设置-->
+	<property name="key_name" value="padaapp" />
+	<!-- 签名的密码设置-->
+	<property name="key_pass" value="padaeaglenet" />
+	<!-- 签名的密码设置-->
+	<property name="store_pass" value="padaeaglenet" />
+
+</project>

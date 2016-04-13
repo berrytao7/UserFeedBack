@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<project name="build_to" default="" basedir=".">
+
+	<!-- 目录名 -->
+	<property name="dir.root" value="E:\build\apps" />
+	<property name="dir.dailybuild" value="${dir.root}/dailybuild" />
+	<property name="dir.newest" value="${dir.root}/newest" />
+	
+	<!-- 产品名 -->
+	<property name="product.Launcher" value="Launcher" />
+	<property name="product.GameCenter" value="GameCenter" />
+	<property name="product.ServiceFramework" value="ServiceFramework" />
+	<property name="product.AppStore" value="AppStore" />
+	<property name="product.DeskClock" value="DeskClock" />
+	<property name="product.FileManager" value="FileManager" />
+	<property name="product.Gallery" value="Gallery" />	
+	<property name="product.OTA" value="OTA" />
+	<property name="product.UserFeedBack" value="UserFeedBack" />
+		
+	<!-- 方案商名-->
+	<property name="dh.sochip" value="sochip" />
+	<property name="dh.nextHuawen" value="nextHuawen" />
+	<property name="dh.worldchip" value="worldchip" />
+	<property name="dh.chipHD" value="chipHD" />
+	<property name="dh.amlogic" value="amlogic" />
+	<property name="dh.allwinner" value="allwinner" />
+	
+	<!-- 品牌厂商 -->
+	<property name="brand.jianUI" value="jianUI" />
+	<property name="brand.onda" value="onda" />
+	<property name="brand.teclast" value="teclast" />
+	<property name="brand.ployer" value="ployer" />	
+	<property name="brand.msi" value="msi" />
+	<property name="brand.colorful" value="colorful" />
+	<property name="brand.allwinner" value="allwinner" />
+	<property name="brand.luftco" value="luftco" />
+	<property name="brand.plainnet" value="plainnet" />
+	<property name="brand.huawen" value="huawen" />
+	
+	<!-- system on chip -->
+	<property name="soc.allwinner" value="allwinner" />
+	<property name="soc.amlogic" value="amlogic" />
+	<property name="soc.mtk" value="mtk" />
+	<property name="soc.intel" value="intel" />
+	
+	<!-- 屏幕分辨率 SCREEN RESOLUTION -->
+	<property name="sr.1024.600" value="1024.600" />
+	<property name="sr.1024.768" value="1024.768" />
+	<property name="sr.1280.800" value="1280.800" />
+	<property name="sr.1920.1200" value="1920.1200" />	
+	<property name="sr.2048.1536" value="2048.1536" />
+		
+	<!-- sdk -->
+	<property name="sdk4.2" value="sdk4.2" />
+	<property name="sdk4.3" value="sdk4.3" />
+	<property name="sdk4.4" value="sdk4.4" />
+	
+	
+	<tstamp>
+		<format property="time.today" pattern="yyyy.MM.dd" locale="en" />
+	</tstamp>
+	
+	<target name="save_result_launcher">
+		<echo>copy file to dailybuild </echo>
+		<echo>product=${param.product}</echo>
+		<echo>brand=${param.brand}</echo>
+		<echo>srcfile=${param.srcfile}</echo>
+		<echo>filename=${param.filename}</echo>
+		
+		<!-- to dailybuild dir   eg. E:\build\apps\dailybuild\Launcher\onda  -->
+		<property name="dailybuild_dir" value="${dir.dailybuild}/${param.product}/${param.brand}/${time.today}" />
+		<mkdir dir="${dailybuild_dir}" />		
+		
+		<copy file="${param.srcfile}" tofile="${dailybuild_dir}/${param.filename}" />
+		
+		<!-- to newest dir -->
+		<property name="newest_dir" value="${dir.newest}/${param.product}/${param.brand}/${param.soc}/${param.sdk}/${param.sr}" />
+		<mkdir dir="${newest_dir}" />
+		
+		<copy file="${param.srcfile}" tofile="${newest_dir}/${param.product}.apk" />		
+		
+	</target>
+	
+	<target name="save_result">
+		<echo>copy file to dailybuild </echo>
+		<echo>product=${param.product}</echo>
+		<echo>brand=${param.brand}</echo>
+		<echo>srcfile=${param.srcfile}</echo>
+		<echo>filename=${param.filename}</echo>
+		
+		<!-- to dailybuild dir   eg. E:\build\apps\dailybuild\Launcher\onda  -->
+		<property name="dailybuild_dir" value="${dir.dailybuild}/${param.product}/${param.brand}/${time.today}" />
+		<mkdir dir="${dailybuild_dir}" />		
+		
+		<copy file="${param.srcfile}" tofile="${dailybuild_dir}/${param.filename}" />
+		
+		<!-- to newest dir -->
+		<property name="newest_dir" value="${dir.newest}/${param.product}/${param.brand}" />
+		<mkdir dir="${newest_dir}" />
+		
+		<copy file="${param.srcfile}" tofile="${newest_dir}/${param.product}.apk" />		
+		
+	</target>
+	
+</project>

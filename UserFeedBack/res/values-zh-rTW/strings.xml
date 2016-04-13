@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">用戶反饋</string>
+    
+    <string name="txt1">系統自動重啟</string>
+    <string name="txt2">耗電過多</string>
+    <string name="txt3">應用異常退出</string>
+    <string name="txt4">錯誤BUG</string>
+    <string name="txt5">賬號充值故障</string>
+    <string name="txt6">登錄異常</string>
+    <string name="txt7">其他錯誤</string>
+    <string name="txt8">無法上網</string>
+    <string name="txt9">意見建議</string>
+    
+    
+    <string name="buttom_txt_label">如有任何問題需要幫助請發至郵箱&#160;</string>
+    
+    <string name="type_label">反饋類型</string>
+    <string name="desp_label">問題描述(必填)</string>
+    <string name="desp_hint">最多200字</string>
+    <string name="feedback_label">反饋附圖</string>
+    <string name="email_label">請留下您的聯系郵箱</string>
+
+    <string name="back_label">取消</string>
+    <string name="commit_label">提交</string>
+    <string name="network_not_available_label">網絡不可用!</string>    
+    <string name="desp_null_label">問題描述不能為空</string>
+    <string name="email_format_error">郵箱地址格式不正確</string>
+   	 <string name="upload_img_fail">有 <xliff:g id="number">%1$d</xliff:g> 張圖片上傳失敗，請重試</string>
+   	<string name="commit_success_label">提交成功,感謝您的反饋</string>
+   	<string name="commit_fail_label">提交失敗!</string>
+   	
+   	<string name="dialog_msg3">正在提交信息</string>
+   	
+   	<string name="photo_label">請選擇圖片</string>
+   	
+   	<string name="dialog_msg">當前有信息尚未保存，是否提交?</string>
+   	<string name="photo_loading">加載中...</string>
+   	
+   	<string name="yes_label">是</string>
+   	<string name="no_label">否</string>
+</resources>

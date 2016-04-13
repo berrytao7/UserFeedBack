@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">Feedback</string>
+    
+    <string name="txt1">Random reboots</string>
+    <string name="txt2">Power Consumption</string>
+    <string name="txt3">Force Closes</string>
+    <string name="txt4">Error BUG</string>
+    <string name="txt5">Recharge Fault</string>
+    <string name="txt6">Login Issues</string>
+    <string name="txt7">Other</string>
+    <string name="txt8">Network Issues</string>
+    <string name="txt9">Suggestions</string>
+    
+    
+    <string name="buttom_txt_label">Any questions need help please send to mailbox&#160;</string>
+    <string name="buttom_email_label">services@eaglenet.cn</string>
+    
+    <string name="type_label">Feedback Type</string>
+    <string name="desp_label">Question Description(must)</string>
+    <string name="desp_hint">less than 200 characters</string>
+    <string name="feedback_label">Picture</string>
+    <string name="email_label">Your Contact Email</string>
+    
+	<string name="back_label">Cancel</string>
+    <string name="commit_label">Send</string>
+    <string name="network_not_available_label">The network is not available.</string>
+    <string name="desp_null_label">the description of question cann\'t be empty</string>
+    <string name="email_format_error">The email address is not in the correct format</string>
+     <string name="upload_img_fail">Have <xliff:g id="number">%1$d</xliff:g> pictures upload failed,please try agagin</string>
+   	<string name="commit_success_label">Commit successfully,thanks for your feedback!</string>
+   	<string name="commit_fail_label">Commit failed!</string>
+    
+   	<string name="dialog_msg3">committing information</string>
+   	
+   	<string name="photo_label">Please select picture</string>   
+   	
+   	<string name="dialog_msg">The information has not been saved, commit or not?</string>
+   	<string name="photo_loading">loading...</string>
+   	
+   	<string name="yes_label">Yes</string>
+   	<string name="no_label">No</string>
+   
+</resources>

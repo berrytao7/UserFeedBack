@@ -1,0 +1,888 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	描述：
+		 实际构建过程的定义。
+		 编译过程描述：项目工程下的所有文件拷贝到temp目录下，这样做是为了过滤SVN的版本控制文件，然后基于temp目录进行编译等操作。
+-->
+
+<project
+    name="build_common"
+    basedir="."
+    default="" >
+
+    <!-- 项目的目录属性定义 -->
+
+    <property
+        name="temp"
+        value="${project_path}\out" />
+ <!-- 临时目录，用于运行时的源代码、中间结果存放 -->
+
+    <property
+        name="autotest"
+        value="${project_path}\autotest" />
+ <!-- 自动化测试目录 -->
+
+    <property
+        name="bin"
+        value="${project_path}\bin" />
+ <!-- 编译输出结果目录 -->
+
+    <property
+        name="src"
+        value="${project_path}\src" />
+ <!-- 运行时源代码目录 -->
+
+    <property
+        name="res"
+        value="${project_path}\res" />
+ <!-- 运行时资源目录 -->
+
+    <property
+        name="lib"
+        value="${project_path}\libs" />
+ <!-- 运行时库目录 -->
+
+    <property
+        name="assets"
+        value="${project_path}\assets" />
+ <!-- 运行时assets目录 -->
+
+    <property
+        name="classes"
+        value="${temp}\classes" />
+ <!-- 运行时classes输出目录 -->
+
+    <property
+        name="classes-obfs"
+        value="${temp}\classes-obfs" />
+ <!-- 运行时混淆后的classes输出目录 -->
+
+    <property
+        name="gen"
+        value="${project_path}\gen" />
+ <!-- 运行时gen目录 -->
+
+    <property
+        name="dex"
+        value="${temp}\classes.dex" />
+ <!-- dex路径 -->
+
+    <property
+        name="dex-obfs"
+        value="${temp}\classes-obfs.dex" />
+ <!-- dex路径 -->
+
+    <property
+        name="out"
+        value="${project_path}\..\out\UserFeedBack1.0\${TODAY}" />
+
+    <property
+        name="AndroidManifest"
+        value="${project_path}\AndroidManifest.xml" />
+ <!-- dex路径 -->
+
+
+    <!-- Android相关属性定义 -->
+    <!--
+     	<property name="android_platform_tools" value="${android_home}\platform-tools" />
+	<property name="android_framework" value="${android_home}\platforms\android-${android_version}\framework.aidl" />
+	<property name="aapt" value="${android_platform_tools}\aapt" />
+	<property name="aidl" value="${android_platform_tools}\aidl" />
+	<property name="adb" value="${android_platform_tools}\adb" />
+	<property name="dx" value="${android_platform_tools}\dx.bat" />
+	<property name="apkbuilder" value="${android_home}\tools\apkbuilder.bat" />
+	<property name="zipalign" value="${android_home}\tools\zipalign" />
+	<property name="androidjar" value="${android_home}\platforms\android-${android_version}\android.jar" />
+    -->
+
+    <property
+        name="android_platform_tools"
+        value="${android_home}\platform-tools" />
+
+    <property
+        name="android_framework"
+        value="${android_home}\platforms\android-${android_version}\framework.aidl" />
+
+    <property
+        name="aapt"
+        value="${android_home}\build-tools\17.0.0\aapt" />
+
+    <property
+        name="aidl"
+        value="${android_home}\build-tools\17.0.0\aidl" />
+
+    <property
+        name="adb"
+        value="${android_platform_tools}\adb" />
+
+    <property
+        name="dx"
+        value="${android_home}\build-tools\17.0.0\dx.bat" />
+
+    <property
+        name="apkbuilder"
+        value="${android_home}\tools\apkbuilder.bat" />
+
+    <property
+        name="zipalign"
+        value="${android_home}\tools\zipalign" />
+
+    <property
+        name="androidjar"
+        value="${android_home}\platforms\android-${android_version}\android.jar" />
+
+    <tstamp>
+
+        <format
+            locale="en"
+            pattern="yyyyMMdd"
+            property="TODAY" />
+    </tstamp>
+
+    <!-- ###### Target定义部分 ###### -->
+
+    <target name="clean" >
+
+        <echo>
+Start clean...
+        </echo>
+
+        <mkdir dir="${bin}" />
+
+        <mkdir dir="${temp}" />
+
+        <mkdir dir="${classes}" />
+        <!-- <mkdir dir="${classes-obfs}" /> -->
+
+        <mkdir dir="${gen}" />
+
+        <mkdir dir="${lib}" />
+
+        <delete includeEmptyDirs="true" >
+
+            <!-- <fileset dir="${bin}" excludes="**/.svn,**/.svn/**" /> -->
+
+            <fileset dir="${temp}" />
+
+            <fileset dir="${gen}" />
+        </delete>
+
+        <echo>
+Finished clean...
+        </echo>
+    </target>
+
+    <target name="init" >
+
+        <echo>
+Start init...
+        </echo>
+
+        <antcall target="out_not_exist" />
+ <!-- 目录不存在则创建 -->
+
+        <mkdir dir="${bin}" />
+
+        <mkdir dir="${temp}" />
+
+        <mkdir dir="${classes}" />
+
+        <mkdir dir="${classes-obfs}" />
+
+        <mkdir dir="${gen}" />
+
+        <mkdir dir="${lib}" />
+
+        <mkdir dir="${project_path}\classlib" />
+
+        <echo>
+Copy files to temp directory...
+        </echo>
+
+        <copy
+            filtering="true"
+            todir="temp" >
+
+            <fileset dir="${project_path}" >
+
+                <exclude name="**/.svn/*" />
+
+                <exclude name="temp" />
+
+                <exclude name="bin" />
+            </fileset>
+        </copy>
+
+        <echo>
+Finish init...
+        </echo>
+    </target>
+
+    <!-- 为该项目资源生成R.java文件 -->
+
+    <target name="generate" >
+
+        <echo>
+Generate R.java from resource ...
+        </echo>
+
+        <exec
+            executable="${aapt}"
+            failonerror="true" >
+
+            <arg value="package" />
+
+            <arg value="-m" />
+
+            <arg value="-J" />
+
+            <arg value="${gen}" />
+
+            <arg value="-M" />
+
+            <arg value="${AndroidManifest}" />
+
+            <arg value="-S" />
+
+            <arg value="${res}" />
+
+            <arg value="-I" />
+
+            <arg value="${androidjar}" />
+        </exec>
+    </target>
+
+    <!-- 从*.aidl文件生成java classes -->
+
+    <target name="aidl" >
+
+        <echo>
+Start compile aidl files to java classes...
+        </echo>
+
+        <apply
+            executable="${aidl}"
+            failonerror="true" >
+
+            <arg value="-p${android_framework}" />
+
+            <arg value="-I${src}" />
+
+            <arg value="-o${gen}" />
+
+            <fileset dir="${src}" >
+
+                <include name="**/*.aidl" />
+            </fileset>
+        </apply>
+    </target>
+    <!--
+	<path id="UserFeedBack.classpath">  
+		<pathelement location="libs/ksoap2-android-assembly-3.3.0.jar"/>  
+    </path>
+    -->
+    <!-- 编译项目的.java文件 -->
+
+    <target name="compile" >
+
+        <echo>
+Start compile source code...
+        </echo>
+
+        <echo>
+The debug param is default to true, for the exception upload
+			feature required it...
+        </echo>
+
+        <copy
+            filtering="true"
+            todir="${classes}" >
+
+            <fileset dir="${project_path}\classlib" >
+
+                <exclude name="**/.svn/*" />
+            </fileset>
+        </copy>
+
+        <echo>
+compile...
+        </echo>
+
+        <javac
+            bootclasspath="${androidjar}"
+            debug="true"
+            destdir="${classes}"
+            encoding="${encoding}"
+            extdirs=""
+            target="1.5" >
+
+            <src path="${src}" />
+
+            <src path="${gen}" />
+
+            <classpath>
+
+                <fileset
+                    dir="${lib}"
+                    includes="*.jar" />
+
+                <fileset
+                    dir="${lib}"
+                    includes="**/*.so" />
+            </classpath>
+        </javac>
+    </target>
+
+    <!-- 为了混淆，将class文件打包为jar -->
+
+    <target name="package" >
+
+        <echo>
+Packing compile results...
+        </echo>
+
+        <jar
+            basedir="${classes}"
+            destfile="${temp}\temp.jar" />
+
+        <echo>
+Copy jar to test directory...
+        </echo>
+    </target>
+
+    <!-- 对打包后的结果进行混淆 -->
+    <!-- 注意：混淆参数需要根据项目实际情况进行调整 -->
+
+    <target
+        name="obfuscate"
+        if="obfuscated" >
+
+        <echo>
+Obfuscating package...
+        </echo>
+
+        <java
+            failonerror="true"
+            fork="true"
+            jar="${proguard_home}\lib\proguard.jar" >
+
+            <jvmarg value="-Dmaximum.inlined.code.length=32" />
+
+            <arg value="-injars ${temp}\temp.jar" />
+
+            <arg value="-outjars obfuscated.jar" />
+
+            <arg value="-libraryjars ${androidjar}" />
+
+            <arg value="-libraryjars ${lib}\taf-proxy-1.0.0-SNAPSHOT.jar" />
+
+            <arg value="-libraryjars ${lib}\wup-1.0.0-nosrc.jar" />
+            <!-- 如果使用到外部库，请在这里指定 -->
+
+            <arg value="-libraryjars ${lib}" />
+            <!-- <arg value="-dontpreverify"/> -->
+
+            <arg value="-dontoptimize" />
+
+            <arg value="-dontusemixedcaseclassnames" />
+
+            <!-- 请开发据实际情况追加混淆例外 -->
+
+            <arg value="-keep public class * extends android.app.Activity" />
+
+            <arg value="-keep public class * extends android.app.Application" />
+
+            <arg value="-keep public class * extends android.app.Service" />
+
+            <arg value="-keep public class * extends android.content.BroadcastReceiver" />
+
+            <arg value="-keep public class * extends android.content.ContentProvider" />
+
+            <arg value="-keep public class com.android.vending.licensing.ILicensingService" />
+
+            <arg value="-keepclasseswithmembernames class * { native &lt;methods>; }" />
+
+            <arg value="-keepclasseswithmembernames class * { public &lt;init>(android.content.Context, android.util.AttributeSet);}" />
+
+            <arg value="-keepclasseswithmembernames class * { public &lt;init>(android.content.Context, android.util.AttributeSet, int);}" />
+
+            <arg value="-keepclassmembers enum * { public static **[] values(); public static ** valueOf(java.lang.String);}" />
+
+            <arg value="-keep class * implements android.os.Parcelable { public static final android.os.Parcelable$Creator *;}" />
+
+            <arg value="-keepclassmembers class **.R$* { public static &lt;fields>;}" />
+
+            <arg value="-keep public class com.tencent.launcher.phonelock.TXControlBarView$ControlBarLayout" />
+
+            <arg value="-keep public class com.tencent.launcher.customview.FolderImportItem" />
+
+            <arg value="-keep public class com.tencent.launcher.processmanager.ProcessManagerItem" />
+
+            <arg value="-keep public class com.tencent.launcher.customview.TencentPreference" />
+
+            <arg value="-keep public class com.tencent.launcher.customview.TencentDialogPreference" />
+
+            <arg value="-keep public class com.tencent.launcher.customview.DialogBackupDesktopConfig" />
+
+            <arg value="-keep public class com.tencent.launcher.customview.DialogRestoreDesktopConfig" />
+
+            <arg value="-keep public class com.tencent.launcher.customview.icon.FlatFolderIcon" />
+
+            <arg value="-keep public class com.tencent.launcher.customview.icon.FlatIconView" />
+
+            <arg value="-keep public class com.tencent.launcher.component.QSlidingDrawer" />
+
+            <arg value="-keep public class com.tencent.launcher.searchview.PinnedHeaderListView" />
+
+            <arg value="-keep public class com.tencent.launcher.searchview.FastLetterScrollView" />
+
+            <arg value="-keep public class com.tencent.launcher.searchview.SearchSpinner" />
+
+            <arg value="-keep public class com.tencent.launcher.customview.WorkspacePreview" />
+
+            <arg value="-keep public class com.tencent.launcher.component.WidgetView" />
+
+            <arg value="-keep public class com.tencent.launcher.component.FolderRename" />
+
+            <arg value="-keep public class com.tencent.launcher.component.WidgetShow" />
+
+            <arg value="-keep public class com.tencent.launcher.walker.WalkerView" />
+
+            <arg value="-keep public class com.tencent.launcher.component.QListView" />
+
+            <arg value="-keep public class com.tencent.launcher.searchview.RecentList" />
+
+            <arg value="-keep public class com.tencent.launcher.component.FolderRename" />
+
+            <arg value="-keep public class com.tencent.launcher.searchview.AntiAliasImageView" />
+
+            <arg value="-keep public class com.tencent.account.** {public *;}" />
+
+            <arg value="-keep public class Qrom.** {public *;}" />
+
+            <arg value="-keep public class ImageCloud.** {public *;}" />
+
+            <arg value="-keep public class MDeskTop.**" />
+
+            <arg value="-keep public class com.qq.**" />
+
+            <arg value="-keep public class MTT.**" />
+
+            <!-- <arg value="-optimizationpasses 7"/> -->
+
+            <arg value="-verbose" />
+            <!-- 打印混淆过程产生的中间信息，其中mapping用于反向解析异常信息 -->
+
+            <arg value="-dump ${temp}\dump.txt" />
+
+            <arg value="-printusage ${temp}\usage.txt" />
+
+            <arg value="-printmapping ${bin}\mapping.txt" />
+
+            <arg value="-printseeds ${temp}\seeds.txt" />
+
+            <arg value="-dontskipnonpubliclibraryclasses" />
+
+            <arg value="-dontskipnonpubliclibraryclassmembers" />
+            <!-- 当混淆参数很多时，建议写在独立的proguard.cfg文件中，然后以下面方式来引用 -->
+
+
+            <!-- arg value="@proguard.cfg"/ -->
+        </java>
+
+        <delete file="${temp}\temp.jar" />
+
+        <unzip
+            dest="${classes-obfs}"
+            src="obfuscated.jar" />
+
+        <delete file="obfuscated.jar" />
+
+        <property
+            name="obfuscated"
+            value="true" />
+    </target>
+
+    <!-- Covert unobfuscated class files to dex file -->
+
+    <target name="dex" >
+
+        <echo>
+Coverting obfuscated class files to dex file...
+        </echo>
+
+        <apply
+            executable="${dx}"
+            failonerror="true"
+            parallel="true" >
+
+            <arg value="--dex" />
+
+            <arg value="--output=${dex}" />
+
+            <arg path="${classes}" />
+
+            <fileset
+                dir="${lib}"
+                includes="*.jar" />
+        </apply>
+    </target>
+
+    <!-- Covert obfuscated class files to dex file -->
+
+    <target
+        name="dex-obfs"
+        if="obfuscated" >
+
+        <echo>
+Coverting obfuscated class files to dex file...
+        </echo>
+
+        <apply
+            executable="${dx}"
+            failonerror="true"
+            parallel="true" >
+
+            <arg value="--dex" />
+
+            <arg value="--output=${dex-obfs}" />
+
+            <arg path="${classes-obfs}" />
+
+            <fileset
+                dir="${lib}"
+                includes="*.jar" />
+        </apply>
+    </target>
+
+    <!--
+         打包项目的资源文件 			<arg value="-A" />
+			<arg value="${assets}" />
+    -->
+
+    <target name="package_res_with_assets" >
+
+        <echo>
+Package res and assets...
+        </echo>
+
+        <exec
+            executable="${aapt}"
+            failonerror="true" >
+
+            <arg value="package" />
+
+            <arg value="-f" />
+
+            <arg value="-M" />
+
+            <arg value="${AndroidManifest}" />
+
+            <arg value="-S" />
+
+            <arg value="${res}" />
+
+            <arg value="-I" />
+
+            <arg value="${androidjar}" />
+
+            <arg value="-F" />
+
+            <arg value="${temp}\${file_name}.ap_" />
+        </exec>
+    </target>
+
+    <!-- 打包应用，此处不做签名，在后续的步骤中可以使用商业发布的密钥文件进行签名 -->
+
+    <target name="release" >
+
+        <echo>
+Build unsigned and unobfuscated apk file from dex and resouse...
+        </echo>
+
+        <exec
+            executable="${apkbuilder}"
+            failonerror="true" >
+
+            <arg value="${temp}\${file_name}_unobfs.apk" />
+
+            <arg value="-u" />
+
+            <arg value="-z" />
+
+            <arg value="${temp}\${file_name}.ap_" />
+
+            <arg value="-f" />
+
+            <arg value="${dex}" />
+
+            <arg value="-rf" />
+
+            <arg value="${src}" />
+
+            <arg value="-rj" />
+
+            <arg value="${lib}" />
+
+            <arg value="-nf" />
+
+            <arg value="${lib}" />
+        </exec>
+    </target>
+
+    <!-- 打包应用（经混淆），此处不做签名，在后续的步骤中可以使用商业发布的密钥文件进行签名 -->
+
+    <target
+        name="release-obfs"
+        if="obfuscated" >
+
+        <echo>
+Build unsigned and obfuscated apk file from dex and resouse...
+        </echo>
+
+        <exec
+            executable="${apkbuilder}"
+            failonerror="true" >
+
+            <arg value="${temp}\${file_name}_obfs.apk" />
+
+            <arg value="-u" />
+
+            <arg value="-z" />
+
+            <arg value="${temp}\${file_name}.ap_" />
+
+            <arg value="-f" />
+
+            <arg value="${dex-obfs}" />
+
+            <arg value="-rf" />
+
+            <arg value="${src}" />
+
+            <arg value="-rj" />
+
+            <arg value="${lib}" />
+
+            <arg value="-nf" />
+
+            <arg value="${lib}" />
+        </exec>
+    </target>
+
+    <!-- 对包未混淆的包进行签名 -->
+
+    <target name="sign" >
+
+        <echo>
+Begin sign unobfuscated package...
+        </echo>
+        
+        <exec executable="${signer}" failonerror="true">
+			<arg value="-verbose" />
+			<arg value="-keystore" />
+			<arg value="${keystore}" />
+			<arg value="-storepass" />
+			<arg value="${store_pass}" />
+			<arg value="-keypass" />
+			<arg value="${key_pass}" />
+			<arg value="-signedjar" />
+			<arg value="${temp}\${file_name}_unobfs_signed.apk" />
+			<arg value="${temp}\${file_name}_unobfs.apk" />
+			<arg value="${key_name}" />
+		</exec>    
+        
+    </target>
+
+    <!-- 对混淆后的包进行签名 -->
+
+    <target
+        name="sign-obfs"
+        if="obfuscated" >
+
+        <echo>
+Begin sign obfuscated package...
+        </echo>
+       
+        <exec executable="${signer}" failonerror="true">
+			<arg value="-verbose" />
+			<arg value="-keystore" />
+			<arg value="${keystore}" />
+			<arg value="-storepass" />
+			<arg value="${store_pass}" />
+			<arg value="-keypass" />
+			<arg value="${key_pass}" />
+			<arg value="-signedjar" />
+			<arg value="${temp}\${file_name}_obfs_signed.apk" />
+			<arg value="${temp}\${file_name}_obfs.apk" />
+			<arg value="${key_name}" />
+		</exec>
+       
+    </target>
+
+    <!-- zipalign,对未混淆的签名包做优化 -->
+
+    <target name="zipalign" >
+
+        <echo>
+Start zipalign unobfuscated package...
+        </echo>
+
+        <property
+            name="file_name"
+            value="${public_file_name}" />
+
+        <antcall target="apk_is_exist" >
+
+            <param
+                name="sign_file_name"
+                value="${out}\${file_name}_unobfs_zipaligned.apk" />
+        </antcall>
+
+        <exec
+            executable="${zipalign}"
+            failonerror="true" >
+
+            <arg value="-v" />
+
+            <arg value="4" />
+
+            <arg value="${temp}\${file_name}_unobfs_signed.apk" />
+            <!-- <arg value="${bin}\${file_name}_unobfs_zipaligned.apk" /> -->
+
+            <arg value="${out}\${file_name}_unobfs_zipaligned.apk" />
+        </exec>
+
+        <echo>
+End zipalign...
+        </echo>
+
+        <antcall target="save_result" >
+
+            <param
+                name="param.product"
+                value="${product}" />
+
+            <param
+                name="param.brand"
+                value="${brand}" />
+
+            <param
+                name="param.srcfile"
+                value="${out}\${file_name}_unobfs_zipaligned.apk" />
+
+            <param
+                name="param.filename"
+                value="${file_name}_unobfs_zipaligned.apk" />
+        </antcall>
+    </target>
+
+    <!-- zipalign,对混淆的签名包做优化 -->
+
+    <target
+        name="zipalign-obfs"
+        if="obfuscated" >
+
+        <echo>
+Start zipalign obfuscated package...
+        </echo>
+
+        <exec
+            executable="${zipalign}"
+            failonerror="true" >
+
+            <arg value="-v" />
+
+            <arg value="4" />
+
+            <arg value="${temp}\${file_name}_obfs_signed.apk" />
+
+            <arg value="${bin}\${file_name}_obfs_zipaligned.apk" />
+        </exec>
+
+        <echo>
+End zipalign...
+        </echo>
+    </target>
+
+    <!-- 打包完成时，将androidmainfest.xml进行还原 -->
+
+    <target name="endzipalign" >
+
+        <echo>
+ restore androidmainfest.xml...
+        </echo>
+
+        <delete file="${project_path}/AndroidManifest.xml" />
+
+        <move
+            file="${project_path}/AndroidManifest.xml_bak"
+            tofile="${project_path}/AndroidManifest.xml" />
+    </target>
+
+    <!-- 判断文件是否存在，如果存在则删除 -->
+
+    <target name="apk_is_exist" >
+
+        <property
+            name="sign_file_name"
+            value="${public_file_name}.apk" />
+
+        <echo>
+ ${sign_file_name}...
+        </echo>
+
+        <available
+            file="${sign_file_name}"
+            property="${sign_file_name}.exist" />
+
+        <condition
+            property="scondition"
+            value="${sign_file_name}.exist" >
+
+            <not>
+
+                <istrue value="true" />
+            </not>
+        </condition>
+
+        <antcall target="apk_exist" >
+
+            <param
+                name="apk_file_name"
+                value="${sign_file_name}" />
+        </antcall>
+    </target>
+
+    <!-- out\GameCenter2.0\${TODAY}\apk文件存在 -->
+
+    <target
+        name="apk_exist"
+        if="${sign_file_name}.exist" >
+
+        <property
+            name="apk_file_name"
+            value="${public_file_name}.apk" />
+
+        <echo>
+ ${apk_file_name} 
+        </echo>
+
+        <delete file="${apk_file_name}" />
+    </target>
+
+    <!-- out\GameCenter2.0\${TODAY}目录不存在 -->
+
+    <target
+        name="out_not_exist"
+        unless="${out}.exist" >
+
+        <echo>
+ out\UserFeedBack1.0\${TODAY}不目录存在 , "${out}.exist" 
+        </echo>
+
+        <mkdir dir="${out}" />
+    </target>
+
+</project>
